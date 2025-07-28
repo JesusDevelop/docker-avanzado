@@ -1,3 +1,3 @@
 # Esto es un ejemplo básico de un Dockerfile que podrías usar
 FROM nginx:alpine
-COPY . /usr/share/nginx/html
+COPY ./index.html /usr/share/nginx/html
