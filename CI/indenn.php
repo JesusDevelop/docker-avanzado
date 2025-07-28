@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en,es">
 
     <head>
         <meta charset="utf-8">
@@ -29,6 +29,13 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+
+        <!-- reCaptcha -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script type="text/javascript" src="js/validation.js">
+
+    </script>
+
     </head>
 
     <body>
@@ -44,7 +51,7 @@
                 <div class="d-flex justify-content-between topbar">
                     <div class="top-info">
                         <!-- <small class="me-3 text-white-50"><a href="#"><i class="fas fa-map-marker-alt me-2 text-secondary"></i></a>Argentina</small> -->
-                        <small class="me-3 text-white-50"><a href="#"><i class="fas fa-envelope me-2 text-secondary"></i></a>info@starterpack.tech</small>
+                        <small class="me-3 text-white-50"><a href="#"><i class="fas fa-envelope me-2 text-secondary"></i></a>contacto@starterpack.tech</small>
                     </div>
                     <div id="note" class="text-secondary d-none d-xl-flex"><small>Ayudamos a superar tu negocio</small></div>
                     <div class="top-link">
@@ -604,7 +611,7 @@
             <i class="bi bi-envelope flex-shrink-0"></i>
             <div>
               <h3>Email</h3>
-              <p>info@starterpack.tech</p>
+              <p>contacto@starterpack.tech</p>
             </div>
           </div><!-- End Info Item -->
 
@@ -612,7 +619,7 @@
             <a href="https://www.instagram.com/starterpack.tech/#"><i class="bi bi-instagram flex-shrink-0"></i></a>
             <div>
               <h3>Instagram</h3>
-              <p>@Starterpack.tech</p>
+              <p>@starterpack.tech</p>
             </div>
           </div>
           <!-- End Info Item -->
@@ -620,7 +627,7 @@
         </div>
 
         <div class="col-lg-8">
-          <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+          <form action="php/registro.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200" onsubmit="return get_action();">
             <div class="row gy-4">
 
               <div class="col-md-6">
@@ -878,19 +885,25 @@
            
 
               <div class="col-md-12">
-                <input type="tel"  name="Telefono" class="form-control" placeholder="Telefono" required="" pattern="[0-9]{9}">
+                <input type="text"  name="telefono" class="form-control" placeholder="Telefono" required="" pattern="^\+\d{1,3}\d{4,14}$" title="Formato: +[código del país][número]">
               </div>
 
               <div class="col-md-12">
                 <textarea class="form-control" name="mensaje" rows="6" placeholder="Mensaje" required=""></textarea>
               </div>
 
-              <div class="col-md-12 text-center">
-                <div class="loading">Cargando</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Tu Mensaje Ha sido enviado!</div>
+              <div class="col-md-12">
+                <div class="g-recaptcha" id="grecaptcha" data-sitekey="6LeNgHgqAAAAALwyrgwzpPWv8RUmlvOcSqlAsm8b"></div>
+                <span id="captcha" style="margin-left:100px;color:red" ></span>
+              </div>
 
-                <button type="submit" class="btn btn-secondary rounded-pill px-5 py-3 text-white">Enviar</button>
+              <div class="col-md-12 text-center">
+                <?php if(isset($_REQUEST['res'])){if($_REQUEST['res']==1){echo '<div id="error_msg" class="sent-message" style="background-color:MediumSeaGreen;color: white; font-weight: bold; padding: 10px; border-radius: 5px;">Gracias por contactarnos. Tu Mensaje fue enviado!</div>';}else{echo '<div class="error-message" id="error_msg" style="background-color:Tomato;color: white; font-weight: bold; padding: 10px; border-radius: 5px;">Hubo un error al enviar tu mensaje, intente nuevamente!</div>';}}
+                echo "<script>setTimeout(() => {document.getElementById('error_msg').innerHTML='';document.getElementById('error_msg').style='background-color:white;'}, 8000);</script>";
+                ?>
+                
+                </br>
+                <button id="enviar" type="submit" class="btn btn-secondary rounded-pill px-5 py-3 text-white" >Enviar</button>
               </div>
 
             </div>
@@ -912,11 +925,15 @@
                         <a href="index.html">
                             <h1 class="text-white fw-bold d-block">Starter<span class="text-secondary">Pack</span> </h1>
                         </a>
-                        <p class="mt-4 text-light">Somos el kit inicial para la transformacion digital de tu negocio. Ofrecemos asesoria y servicios de consultoria IT.</p>
+                        <p class="mt-4 text-light" style="text-align: justify;">Somos el kit inicial para la transformacion digital de tu negocio. Ofrecemos una gama apmlia de servicios de IT y consultoría a la medida.</p>
                         <div class="d-flex hightech-link">
                             <a href="https://api.whatsapp.com/send/?phone=5491124026751&text&type=phone_number&app_absent=0" class="btn-light nav-fill btn btn-square rounded-circle me-2"><i class="fab fa-whatsapp text-primary"></i></a>
                             <a href="https://www.instagram.com/starterpack.tech/#" class="btn-light nav-fill btn btn-square rounded-circle me-2"><i class="fab fa-instagram text-primary"></i></a>
                             <!-- <a href="" class="btn-light nav-fill btn btn-square rounded-circle me-0"><i class="fab fa-linkedin-in text-primary"></i></a> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mt-4 d-flex flex-column help-link">
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -930,19 +947,10 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <a href="#" class="h3 text-secondary">Links de ayuda</a>
-                        <div class="mt-4 d-flex flex-column help-link">
-                            <a href="" class="mb-2 text-white"><i class="fas fa-angle-right text-secondary me-2"></i>Terminos de uso</a>
-                            <a href="" class="mb-2 text-white"><i class="fas fa-angle-right text-secondary me-2"></i>Politca de privacidad</a>
-                            <a href="" class="mb-2 text-white"><i class="fas fa-angle-right text-secondary me-2"></i>Ayuda</a>
-                            <a href="" class="mb-2 text-white"><i class="fas fa-angle-right text-secondary me-2"></i>FQAs</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
                         <a href="#" class="h3 text-secondary">Contáctanos</a>
                         <div class="text-white mt-4 d-flex flex-column contact-link">
                             <a href="https://api.whatsapp.com/send/?phone=5491124026751&text&type=phone_number&app_absent=0" class="py-3 text-light border-bottom border-primary"><i class="fas fa-phone-alt text-secondary me-2"></i> +54 911 23875377</a>
-                            <a href="mailto:info@starterpack.tech" class="py-3 text-light border-bottom border-primary"><i class="fas fa-envelope text-secondary me-2"></i> info@starterpack.tech</a>
+                            <a href="mailto:contacto@starterpack.tech" class="py-3 text-light border-bottom border-primary"><i class="fas fa-envelope text-secondary me-2"></i> contacto@starterpack.tech</a>
                         </div>
                     </div>
                 </div>
@@ -973,6 +981,11 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+
+    
     </body>
 
 </html>
+<script>
+  window.onload = () => history.replaceState({}, '', location.pathname);
+</script>
