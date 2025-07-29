@@ -4,23 +4,27 @@ services:
     ports:
       - "8080:80"
     networks:
-      - red_balance
-
+      - local-bridge
+    depends_on:
+      - sitio1 
+      - sitio2
+      - sitio3
+  
   sitio1:
     build: ./sitio1
     networks:
-      - red_balance
-
+      - local-bridge
+    
   sitio2:
     build: ./sitio2
     networks:
-      - red_balance
-
+      - local-bridge
+  
   sitio3:
     build: ./sitio3
     networks:
-      - red_balance
-
+      - local-bridge
+  
 networks:
-  red_balance:
+  local-bridge:
     driver: bridge
